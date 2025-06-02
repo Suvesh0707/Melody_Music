@@ -21,17 +21,33 @@ export function AudioPlayerProvider({ children }) {
     });
   }
 
-  function playSong(song) {
-    const index = songs.findIndex((s) => s._id === song._id);
-    if (index !== -1) {
-      setCurrentIndex(index);
-      setIsPlaying(true);
-    } else {
-      addSongs([song]);
-      setCurrentIndex(songs.length); 
-      setIsPlaying(true);
-    }
+function playSong(song) {
+  const index = songs.findIndex((s) => s._id === song._id);
+  if (index !== -1) {
+    setCurrentIndex(index);
+    setIsPlaying(true);
+  } else {
+    setSongs((prevSongs) => {
+      const allIds = new Set(prevSongs.map((s) => s._id));
+      if (!allIds.has(song._id)) {
+        const updatedSongs = [...prevSongs, song];
+        setCurrentIndex(updatedSongs.length - 1); 
+        setIsPlaying(true);
+        return updatedSongs;
+      }
+      return prevSongs;
+    });
   }
+}
+
+
+  const pauseSong = () => {
+  if (audioRef.current) {
+    audioRef.current.pause();
+    setIsPlaying(false);
+  }
+};
+
 
   function togglePlayPause() {
     if (!currentSong) return;
@@ -39,59 +55,52 @@ export function AudioPlayerProvider({ children }) {
   }
 
   function playNext() {
-    if (songs.length === 0) return;
-    setCurrentIndex((prev) => {
-      if (prev === null || prev === songs.length - 1) return 0;
-      return prev + 1;
-    });
-    setIsPlaying(true);
-  }
+  if (songs.length === 0) return;
+  setCurrentIndex((prev) => {
+    const nextIndex = prev === null || prev === songs.length - 1 ? 0 : prev + 1;
+    return nextIndex;
+  });
+  setIsPlaying(true);
+}
 
-  function playPrevious() {
-    if (songs.length === 0) return;
-    setCurrentIndex((prev) => {
-      if (prev === null || prev === 0) return songs.length - 1;
-      return prev - 1;
-    });
-    setIsPlaying(true);
-  }
+function playPrevious() {
+  if (songs.length === 0) return;
+  setCurrentIndex((prev) => {
+    const prevIndex = prev === null || prev === 0 ? songs.length - 1 : prev - 1;
+    return prevIndex;
+  });
+  setIsPlaying(true);
+}
+ useEffect(() => {
+  if (currentIndex === null || !songs[currentIndex]) return;
 
-  useEffect(() => {
-    if (!currentSong) {
-      audioRef.current.pause();
-      audioRef.current.src = "";
+  const song = songs[currentIndex];
+  audioRef.current.src = song.audioUrl;
+  audioRef.current.load();
+
+  if (isPlaying) {
+    audioRef.current.play().catch(() => {
       setIsPlaying(false);
-      return;
-    }
+    });
+  }
 
-    audioRef.current.src = currentSong.audioUrl;
-    audioRef.current.load();
+  const handleEnded = () => {
+    playNext();
+  };
 
-    if (isPlaying) {
-      audioRef.current.play().catch(() => {
-        setIsPlaying(false);
-      });
-    } else {
-      audioRef.current.pause();
-    }
+  const handleWaiting = () => setIsBuffering(true);
+  const handlePlaying = () => setIsBuffering(false);
 
-    const handleEnded = () => {
-      playNext();
-    };
+  audioRef.current.addEventListener("ended", handleEnded);
+  audioRef.current.addEventListener("waiting", handleWaiting);
+  audioRef.current.addEventListener("playing", handlePlaying);
 
-    const handleWaiting = () => setIsBuffering(true);
-    const handlePlaying = () => setIsBuffering(false);
-
-    audioRef.current.addEventListener("ended", handleEnded);
-    audioRef.current.addEventListener("waiting", handleWaiting);
-    audioRef.current.addEventListener("playing", handlePlaying);
-
-    return () => {
-      audioRef.current.removeEventListener("ended", handleEnded);
-      audioRef.current.removeEventListener("waiting", handleWaiting);
-      audioRef.current.removeEventListener("playing", handlePlaying);
-    };
-  }, [currentSong, isPlaying]);
+  return () => {
+    audioRef.current.removeEventListener("ended", handleEnded);
+    audioRef.current.removeEventListener("waiting", handleWaiting);
+    audioRef.current.removeEventListener("playing", handlePlaying);
+  };
+}, [currentIndex, isPlaying]);
 
   return (
     <AudioPlayerContext.Provider
@@ -102,6 +111,7 @@ export function AudioPlayerProvider({ children }) {
         isPlaying,
         isBuffering,
         playSong,
+        pauseSong,
         togglePlayPause,
         playNext,
         playPrevious,

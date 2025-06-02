@@ -4,31 +4,31 @@ import { createSong, getSongById, createVisualSongs, getRegularSongs, getVisualS
 
 const router = express.Router();
 
-const upload = multer();
+// const upload = multer();
 
-router.post(
-  "/",
-  upload.fields([
-    { name: "audioFile", maxCount: 10},
-    { name: "coverImage", maxCount: 10 },
-  ]),
-  createSong
-);
+// router.post(
+//   "/",
+//   upload.fields([
+//     { name: "audioFile", maxCount: 10},
+//     { name: "coverImage", maxCount: 10 },
+//   ]),
+//   createSong
+// );
 
-router.post("/hindi", upload.fields([
-  { name: "audioFile", maxCount: 10 },
-  { name: "coverImage", maxCount: 10 }
-]), createVisualSongs);
+// router.post("/hindi", upload.fields([
+//   { name: "audioFile", maxCount: 10 },
+//   { name: "coverImage", maxCount: 10 }
+// ]), createVisualSongs);
 
-router.post("/marathi", upload.fields([
-  { name: "audioFile", maxCount: 10 },
-  { name: "coverImage", maxCount: 10 }
-]), createMarathiSongs);
+// router.post("/marathi", upload.fields([
+//   { name: "audioFile", maxCount: 10 },
+//   { name: "coverImage", maxCount: 10 }
+// ]), createMarathiSongs);
 
-router.post("/english", upload.fields([
-  { name: "audioFile", maxCount: 10 },
-  { name: "coverImage", maxCount: 10 }
-]), createEnglishSongs);
+// router.post("/english", upload.fields([
+//   { name: "audioFile", maxCount: 10 },
+//   { name: "coverImage", maxCount: 10 }
+// ]), createEnglishSongs);
 
 
 router.get("/getsongs", getRegularSongs);

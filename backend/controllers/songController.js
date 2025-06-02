@@ -417,11 +417,28 @@ export const getEnglishSongs = async (req, res) => {
 
 export const getAllSongs = async (req, res) => {
   try {
-    const songs = await Song.find({});
+    let search = req.query.search || "";
+    search = search.trim();
 
-    res.json({ songs });
+    if (!search) {
+      const songs = await Song.find();
+      return res.status(200).json({ success: true, songs });
+    }
+    const words = search.split(/\s+/);
+    const regexes = words.map(word => new RegExp(word, "i"));
+    const filter = {
+      $or: [
+        ...regexes.map(regex => ({ title: regex })),
+        ...regexes.map(regex => ({ artist: regex })),
+      ],
+    };
+
+    const songs = await Song.find(filter).limit(50);
+
+    res.status(200).json({ success: true, songs });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error fetching songs:", error);
+    res.status(500).json({ success: false, message: "Failed to fetch songs" });
   }
 };
 

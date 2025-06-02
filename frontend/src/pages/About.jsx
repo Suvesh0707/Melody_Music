@@ -3,8 +3,9 @@ import { FaFacebookF, FaInstagram, FaTwitter, FaPhone } from 'react-icons/fa';
 
 function About() {
   return (
-    <div className="bg-[#1a1a1a] text-white px-6 md:px-16 py-12 shadow-white shadow-2xl">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
+<div id="aboutus" className="bg-[#1a1a1a] text-white py-12 shadow-2xl top-shadow-lg">
+  <div className="max-w-[100vw] w-full px-6 md:px-16 mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
+
         <div className="md:col-span-2">
           <h2 className="text-xl font-bold mb-4">About</h2>
           <p className="text-gray-300 mb-2">
