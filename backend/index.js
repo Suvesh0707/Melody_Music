@@ -24,10 +24,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(session({
-  secret: 'your-secret-key', // use a strong secret in prod
+  secret: "secretsessionkey",
   resave: false,
   saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  },
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 

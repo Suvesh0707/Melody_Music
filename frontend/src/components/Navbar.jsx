@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { useUser } from "../context/UserContext";  // Import your context hook
 
 function Navbar() {
-  const [user, setUser] = useState(null);
+  const { user, setUser, loading } = useUser();  // Use user context
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
@@ -13,27 +14,17 @@ function Navbar() {
 
   const isAdmin = user && adminGitHubIds.includes(user.githubId);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await axios.get("http://localhost:3000/auth/me", {
-          withCredentials: true,
-        });
-        setUser(res.data);
-      } catch {
-        setUser(null);
-      }
-    };
-    fetchUser();
-  }, []);
-
   const handleLoginLogout = async () => {
     if (user) {
-      await axios.get("http://localhost:3000/auth/logout", {
-        withCredentials: true,
-      });
-      setUser(null);
-      navigate("/");
+      try {
+        await axios.get("http://localhost:3000/auth/logout", {
+          withCredentials: true,
+        });
+        setUser(null);
+        navigate("/");
+      } catch (error) {
+        console.error("Logout failed", error);
+      }
     } else {
       navigate("/login");
     }
@@ -44,6 +35,10 @@ function Navbar() {
       navigate(`/aftersearch?search=${encodeURIComponent(searchTerm.trim())}`);
     }
   };
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-transparent mt-3">
@@ -96,12 +91,11 @@ function Navbar() {
             </Link>
           </li>
 
-          {/* Show Admin link if user is admin */}
           {isAdmin && (
-            <li className="hover:text-yellow-400 cursor-pointer">
+            <li className="hover:text-pink-400 cursor-pointer">
               <Link
                 to="/admin"
-                className="text-yellow-400 hover:text-yellow-300 text-lg font-bold"
+                className="text-pink-400 hover:text-pink-300 text-lg font-bold"
               >
                 Admin
               </Link>

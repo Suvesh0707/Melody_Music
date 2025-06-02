@@ -13,17 +13,18 @@ import About from './pages/About';
 import Playbar from './components/PlayBar';
 import AfterSearch from './pages/AfterSearch';
 import Login from './pages/Login'; 
-import { AudioPlayerProvider } from './context/AudioPlayerContext';
-import { useState } from 'react';
 import Admin from './pages/Admin';
 
-function MainPage({ isLoggedIn }) {
+import { AudioPlayerProvider } from './context/AudioPlayerContext';
+import { UserProvider } from './context/UserContext';  // Import your UserProvider
+
+function MainPage() {
   return (
     <div style={{ maxHeight: '100vh', overflowY: 'auto', color: 'white', padding: '1rem' }}>
-      <Navbar isLoggedIn={isLoggedIn} />
+      <Navbar />
       <div id="app-content">
         <Hero />
-        <NewlyReleaseSong isLoggedIn={isLoggedIn} />
+        <NewlyReleaseSong />
         <PopularArtists />
         <HindiSongs />
         <MarathiSongs />
@@ -37,19 +38,19 @@ function MainPage({ isLoggedIn }) {
 }
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   return (
-    <AudioPlayerProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<MainPage isLoggedIn={isLoggedIn} />} />
-          <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/aftersearch" element={<AfterSearch />} />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
-      </Router>
-    </AudioPlayerProvider>
+    <UserProvider>
+      <AudioPlayerProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/aftersearch" element={<AfterSearch />} />
+            <Route path="/admin" element={<Admin />} />
+          </Routes>
+        </Router>
+      </AudioPlayerProvider>
+    </UserProvider>
   );
 }
 

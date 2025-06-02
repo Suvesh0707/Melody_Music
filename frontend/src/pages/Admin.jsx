@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Navbar from "../components/Navbar";
 
 export default function Admin() {
-  const [audioFile, setAudioFile] = useState(null);
+  const [audioFile, setaudioFile] = useState([]);
   const [coverFile, setCoverFile] = useState(null);
   const [language, setLanguage] = useState("hindi");
   const [message, setMessage] = useState("");
@@ -10,13 +11,16 @@ export default function Admin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!audioFile) {
-      setMessage("Please select an audio file to upload.");
+
+    if (audioFile.length === 0) {
+      setMessage("Please select at least one audio file.");
       return;
     }
 
     const formData = new FormData();
-    formData.append("audioFile", audioFile);
+    audioFile.forEach((file) => {
+      formData.append("audioFile", file); 
+    });
     if (coverFile) formData.append("coverImage", coverFile);
 
     setLoading(true);
@@ -31,21 +35,25 @@ export default function Admin() {
           withCredentials: true,
         }
       );
-      setMessage("Song uploaded successfully!");
-      setAudioFile(null);
+      setMessage("Songs uploaded successfully!");
+      setaudioFile([]);
       setCoverFile(null);
     } catch (error) {
-      setMessage("Upload failed. Please try again.");
+      setMessage(
+        error.response?.data?.message || "Upload failed. Please try again."
+      );
     }
 
     setLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md bg-[#121212] rounded-3xl p-8 border border-pink-700 shadow-lg">
+    <>
+    <Navbar/>
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12 mt-9">
+      <div className="w-full max-w-md rounded-3xl p-8 border border-pink-700 shadow-lg">
         <h2 className="text-4xl font-extrabold text-pink-500 mb-8 text-center tracking-wide">
-          Upload New Song
+          Upload New Songs
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -76,20 +84,20 @@ export default function Admin() {
               </option>
             </select>
           </div>
-
           <div>
             <label
               htmlFor="audioFile"
               className="block mb-2 font-semibold text-pink-400 text-lg"
             >
-              Audio File <span className="text-pink-600">*</span>
+              Audio Files <span className="text-pink-600">*</span>
             </label>
             <input
               id="audioFile"
               type="file"
               accept="audio/*"
+              multiple
               required
-              onChange={(e) => setAudioFile(e.target.files[0])}
+              onChange={(e) => setaudioFile(Array.from(e.target.files))}
               className="w-full cursor-pointer rounded-xl border border-pink-700 bg-[#1f1f1f] px-3 py-3 text-pink-300 file:bg-pink-600 file:text-black file:font-semibold file:px-4 file:py-2 file:rounded-lg file:mr-4 hover:file:bg-pink-700 transition focus:outline-none focus:ring-2 focus:ring-pink-600 focus:ring-opacity-40"
             />
           </div>
@@ -113,14 +121,14 @@ export default function Admin() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-4 rounded-2xl font-extrabold text-lg tracking-wide transition
+            className={`w-full py-4 rounded-2xl font-extrabold text-lg tracking-wide transition cursor-pointer
               ${
                 loading
                   ? "bg-pink-400 cursor-not-allowed"
                   : "bg-pink-600 hover:bg-pink-700"
               } text-black focus:outline-none focus:ring-4 focus:ring-pink-500 focus:ring-opacity-40`}
           >
-            {loading ? "Uploading..." : "Upload Song"}
+            {loading ? "Uploading..." : "Upload Songs"}
           </button>
         </form>
 
@@ -137,5 +145,6 @@ export default function Admin() {
         )}
       </div>
     </div>
+    </>
   );
 }

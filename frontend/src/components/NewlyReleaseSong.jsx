@@ -3,17 +3,18 @@ import axios from "axios";
 import { Play, Pause, Loader2 } from "lucide-react";
 import { useAudioPlayer } from "../context/AudioPlayerContext";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 function NewlyReleaseSong({
   apiEndpoint = "http://localhost:3000/api/songs/getsongs",
   title = "🎵 New Release Songs",
-  isLoggedIn = false, // Added prop to check login state
 }) {
   const [songs, setSongs] = useState([]);
   const [loadingSongs, setLoadingSongs] = useState(true);
   const [visibleCount, setVisibleCount] = useState(5);
   const [selectedSong, setSelectedSong] = useState(null);
 
+  const { user } = useUser(); 
   const {
     playSong,
     currentSong,
@@ -45,9 +46,8 @@ function NewlyReleaseSong({
     setVisibleCount((prev) => prev + 5);
   };
 
-
   const handlePlayLimitCheck = () => {
-    if (!isLoggedIn) {
+    if (!user) {
       let playCount = parseInt(localStorage.getItem("playCount") || "0", 10);
       playCount++;
       localStorage.setItem("playCount", playCount);
@@ -57,7 +57,7 @@ function NewlyReleaseSong({
         return false;
       }
     }
-    return true; 
+    return true;
   };
 
   const visibleSongs = songs.slice(0, visibleCount);
@@ -76,13 +76,12 @@ function NewlyReleaseSong({
       ) : songs.length === 0 ? (
         <p className="text-center text-gray-400">No songs available.</p>
       ) : selectedSong ? (
-        // Focused view
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1 bg-[#1f1f1f] p-8 rounded-2xl shadow-xl max-w-4xl mx-auto text-gray-200">
             <img
               src={selectedSong.coverImageUrl}
               alt={selectedSong.title}
-              className="w-[400px] h-[400px] object-cover rounded-xl mb-6 shadow-lgjustify-center mx-auto"
+              className="w-[400px] h-[400px] object-cover rounded-xl mb-6 shadow-lg justify-center mx-auto"
             />
             <div className="flex justify-between items-center mb-5">
               <h3 className="text-3xl font-extrabold tracking-tight text-white">
@@ -158,7 +157,6 @@ function NewlyReleaseSong({
             </button>
           </div>
 
-          {/* Sidebar with Other Songs */}
           <div className="w-full lg:w-1/3 max-h-[850px] overflow-y-auto pr-2 space-y-4 scrollbar-hide">
             {songs
               .filter((song) => song._id !== selectedSong._id)
@@ -184,7 +182,6 @@ function NewlyReleaseSong({
           </div>
         </div>
       ) : (
-        // Default grid view
         <>
           <div className="grid gap-y-6 gap-x-4 sm:gap-x-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {visibleSongs.map((song) => {
