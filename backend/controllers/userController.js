@@ -1,27 +1,66 @@
 import User from "../models/userModel.js";
 import { generateToken } from "../utils/generateToken.js";
 
-export const githubCallback = async (req, res) => {
+export const githubCallback = async (accessToken, refreshToken, profile, done) => {
   try {
-    const user = req.user; 
-    const token = generateToken(user); 
-    console.log('Generated token:', token);
+    if (!profile.id) {
+      return done(new Error('GitHub profile missing id'), null);
+    }
 
-    res.cookie('token', token, {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-  maxAge: 10 * 24 * 60 * 60 * 1000,
-});
+    let user = await User.findOne({ githubId: profile.id });
 
+    if (!user) {
+      user = new User({
+        githubId: profile.id,
+        username: profile.username,
+        displayName: profile.displayName,
+        email: profile.emails?.[0]?.value,
+        avatarUrl: profile.photos?.[0]?.value,
+        githubUrl: profile.profileUrl,
+        bio: profile._json?.bio,
+        location: profile._json?.location,
+      });
 
-    res.redirect("http://localhost:5173/");
-  } catch (err) {
-    console.error('GitHub Callback Error:', err);
-    res.status(500).json({ error: 'Authentication failed' });
+      await user.save();
+    }
+
+    return done(null, user);
+  } catch (error) {
+    return done(error, null);
   }
 };
 
+
+
+export const googleCallback = async (accessToken, refreshToken, profile, done) => {
+  try {
+    // Try to find existing user by googleId
+    let user = await User.findOne({ googleId: profile.id });
+
+    if (!user) {
+      // If not found, create new user
+      user = new User({
+         googleId: profile.id,
+  displayName: profile.displayName,
+  firstName: profile.name?.givenName || '',
+  lastName: profile.name?.familyName || '',
+  email: profile.emails?.[0]?.value,
+  avatarUrl: profile.photos?.[0]?.value,
+  gender: profile.gender || null,
+  locale: profile._json?.locale || null,
+  emailVerified: profile._json?.email_verified || false,
+  hostedDomain: profile._json?.hd || null,
+        // you can add more fields from profile if needed
+      });
+
+      await user.save();
+    }
+
+    return done(null, user);
+  } catch (error) {
+    return done(error, null);
+  }
+};
 
 
 export const getMe = (req, res) => {
@@ -44,4 +83,43 @@ export const logoutUser = (req, res) => {
     });
     res.status(200).json({ message: "Logged out successfully" });
   });
+};
+
+
+export const githubAuthSuccess = (req, res) => {
+  try {
+    const user = req.user; // passport attaches user here after successful auth
+    const token = generateToken(user);
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
+    });
+
+    res.redirect('http://localhost:5173/');
+  } catch (err) {
+    console.error('GitHub Callback Error:', err);
+    res.status(500).json({ error: 'Authentication failed' });
+  }
+};
+
+export const googleAuthSuccess = (req, res) => {
+  try {
+    const user = req.user;
+    const token = generateToken(user);
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 10 * 24 * 60 * 60 * 1000,
+    });
+
+    res.redirect('http://localhost:5173/');
+  } catch (err) {
+    console.error('Google Callback Error:', err);
+    res.status(500).json({ error: 'Authentication failed' });
+  }
 };

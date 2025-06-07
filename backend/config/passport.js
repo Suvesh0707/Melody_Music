@@ -48,23 +48,14 @@ passport.use(new GitHubStrategy({
   }
 }));
 
-
-
-
-
-
-
-passport.serializeUser((user, done) => {
-  done(null, user.githubId); 
-});
-
-
+passport.serializeUser((user, done) => done(null, user._id));
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await User.findOne({ githubId: id }); 
+    const user = await User.findById(id);
     done(null, user);
   } catch (err) {
-    done(err);
+    done(err, null);
   }
 });
+
 

@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  githubId: { type: String, required: true, unique: true },
+  githubId: { type: String, unique: true, sparse: true },
+  googleId: { type: String, unique: true, sparse: true }, 
   username: String,
   email: String,
   displayName: String,

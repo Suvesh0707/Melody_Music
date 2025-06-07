@@ -1,15 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
+const bgNames = ["bg1", "bg2", "bg3", "bg4", "bg5", "bg6"];
 
 const Hero = () => {
+  const [bg, setBg] = useState("bg1"); // default fallback
+
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * bgNames.length);
+    setBg(bgNames[randomIndex]);
+  }, []);
+
   return (
     <div>
       <section
         className="relative overflow-hidden rounded-3xl flex items-center justify-start bg-black mx-4 my-4 sm:mx-6 md:mx-8 mb-6 sm:mb-8 md:mb-10 h-[calc(100vh-2rem)] max-h-[750px]"
       >
         <img
-          src="bg1.jpg"
+          src={`${bg}.jpg`}
           alt="Music Background"
-          className="absolute inset-0 w-full h-full object-cover brightness-150"
+          className="hidden sm:block absolute inset-0 w-full h-full object-cover brightness-150"
+        />
+
+        <img
+          src={`${bg}-mobile.jpg`}
+          alt="Music Background Mobile"
+          className="block sm:hidden absolute inset-0 w-full h-full object-cover brightness-125"
         />
 
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent" />

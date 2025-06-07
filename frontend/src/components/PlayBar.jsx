@@ -16,7 +16,7 @@ function Playbar() {
     togglePlayPause,
     playNext,
     playPrevious,
-    audioRef, 
+    audioRef,
   } = useAudioPlayer();
 
   const [progress, setProgress] = useState(0);
@@ -26,14 +26,13 @@ function Playbar() {
     const audio = audioRef.current;
     if (!audio) return;
 
-  const updateProgress = () => {
-    if (audio.duration) {
-      setProgress((audio.currentTime / audio.duration) * 100);
-    }
-  };
+    const updateProgress = () => {
+      if (audio.duration) {
+        setProgress((audio.currentTime / audio.duration) * 100);
+      }
+    };
 
     audio.addEventListener("timeupdate", updateProgress);
-
     return () => {
       audio.removeEventListener("timeupdate", updateProgress);
     };
@@ -62,7 +61,8 @@ function Playbar() {
     `${Math.floor(sec / 60)}:${Math.floor(sec % 60).toString().padStart(2, "0")}`;
 
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-[#1a1a1a] text-white px-4 md:px-8 pt-3 pb-3 z-50 shadow-inner flex flex-col">
+    <div className="fixed bottom-0 left-0 w-full bg-[#1a1a1a] text-white px-4 sm:px-6 md:px-10 pt-3 pb-4 z-50 shadow-inner">
+      {/* Progress Bar */}
       <input
         type="range"
         min="0"
@@ -75,8 +75,11 @@ function Playbar() {
         }}
         aria-label="Seekbar"
       />
-      <div className="grid grid-cols-[minmax(200px,300px)_auto_minmax(200px,300px)] items-center w-full">
-        <div className="flex items-center gap-3 truncate">
+
+      {/* Main Controls */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-sm">
+        {/* Song Info */}
+        <div className="flex items-center gap-3 min-w-0">
           <img
             src={currentSong?.coverImageUrl || "https://via.placeholder.com/50"}
             alt={currentSong?.title || "No song"}
@@ -92,7 +95,8 @@ function Playbar() {
           </div>
         </div>
 
-        <div className="flex justify-center space-x-8 text-2xl">
+        {/* Playback Controls */}
+        <div className="flex justify-center items-center gap-6 text-xl sm:text-2xl">
           <FaStepBackward
             className="cursor-pointer hover:text-pink-500"
             onClick={playPrevious}
@@ -114,10 +118,11 @@ function Playbar() {
           />
         </div>
 
-        <div className="flex items-center space-x-4 justify-end text-xs text-gray-400">
+        {/* Volume and Extras */}
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5 text-xs sm:text-sm text-gray-400">
           <span>{formatTime(currentTime)}</span>
           <FaEllipsisH className="cursor-pointer hover:text-pink-500" />
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
             <FaVolumeUp />
             <input
               type="range"
@@ -125,7 +130,7 @@ function Playbar() {
               max="100"
               value={volume}
               onChange={handleVolumeChange}
-              className="w-20 cursor-pointer"
+              className="w-20 sm:w-24 cursor-pointer"
               aria-label="Volume"
             />
           </div>

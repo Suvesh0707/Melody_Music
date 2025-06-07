@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import passport from 'passport';
 import './config/passport.js'; 
-
+import './config/google.js'
 dotenv.config();
 
 const app = express();
@@ -50,6 +50,9 @@ app.use("/api/artist", artistRoutes);
 
 import adminRoutes from './routes/adminRoutes.js';
 app.use('/api/admin', adminRoutes);
+
+import magicRoutes from './routes/magicRoutes.js'
+app.use("/auth", magicRoutes)
 
 
 

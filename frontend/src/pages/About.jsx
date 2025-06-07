@@ -3,59 +3,64 @@ import { FaFacebookF, FaInstagram, FaTwitter, FaPhone } from 'react-icons/fa';
 
 function About() {
   return (
-<div id="aboutus" className="bg-[#1a1a1a] text-white py-12 shadow-2xl top-shadow-lg">
-  <div className="max-w-[100vw] w-full px-6 md:px-16 mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
+    <div
+      id="aboutus"
+      className="bg-[#1a1a1a] text-white py-10 px-4 sm:px-6 lg:px-24 xl:px-32 2xl:px-48"
+    >
+      <div className="max-w-screen-2xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
 
-        <div className="md:col-span-2">
-          <h2 className="text-xl font-bold mb-4">About</h2>
-          <p className="text-gray-300 mb-2">
-            Melodies is a website that has been created for over <span className="text-pink-500 font-semibold">5 Month's</span> now and it is one of the most famous music player website’s in the world.
+        <div className="lg:col-span-2">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">About</h2>
+          <p className="text-gray-300 mb-4 text-sm sm:text-base leading-relaxed">
+            <span className="text-pink-500 font-semibold">Melodies</span> has been live for over
+            <span className="text-pink-400 font-semibold"> 5 months</span> and has become one of the most popular music player websites globally.
           </p>
-          <p className="text-gray-300 mb-2">
-            In this website you can listen and download songs for free. Also if you want no limitation you can buy our <span className="text-blue-400 font-semibold">premium pass’s</span>.
+          <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+            You can enjoy music and downloads for free. For an ad-free experience and more features,
+            consider getting our <span className="text-blue-400 font-semibold">premium pass</span>.
           </p>
         </div>
 
         <div>
-          <h2 className="text-xl font-bold mb-4 border-b border-white w-fit">Melodies</h2>
-          <ul className="space-y-2 text-gray-300">
-            <li>Songs</li>
-            <li>Radio</li>
-            <li>Podcast</li>
+          <h2 className="text-xl font-semibold mb-4 border-b border-gray-500 w-fit">Melodies</h2>
+          <ul className="space-y-2 text-gray-300 text-sm sm:text-base">
+            <li className="hover:text-white transition">Songs</li>
+            <li className="hover:text-white transition">Radio</li>
+            <li className="hover:text-white transition">Podcast</li>
           </ul>
         </div>
 
         <div>
-          <h2 className="text-xl font-bold mb-4 border-b border-white w-fit">Access</h2>
-          <ul className="space-y-2 text-gray-300">
-            <li>Explor</li>
-            <li>Artists</li>
-            <li>Playlists</li>
-            <li>Albums</li>
-            <li>Trending</li>
+          <h2 className="text-xl font-semibold mb-4 border-b border-gray-500 w-fit">Access</h2>
+          <ul className="space-y-2 text-gray-300 text-sm sm:text-base">
+            <li className="hover:text-white transition">Explore</li>
+            <li className="hover:text-white transition">Artists</li>
+            <li className="hover:text-white transition">Playlists</li>
+            <li className="hover:text-white transition">Albums</li>
+            <li className="hover:text-white transition">Trending</li>
           </ul>
         </div>
 
         <div>
-          <h2 className="text-xl font-bold mb-4 border-b border-white w-fit">Contact</h2>
-          <ul className="space-y-2 text-gray-300">
-            <li>About</li>
-            <li>Policy</li>
-            <li>Social Media</li>
-            <li>Support</li>
+          <h2 className="text-xl font-semibold mb-4 border-b border-gray-500 w-fit">Contact</h2>
+          <ul className="space-y-2 text-gray-300 text-sm sm:text-base">
+            <li className="hover:text-white transition">About</li>
+            <li className="hover:text-white transition">Policy</li>
+            <li className="hover:text-white transition">Social Media</li>
+            <li className="hover:text-white transition">Support</li>
           </ul>
         </div>
       </div>
 
-      <div className="mt-12 border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
+      <div className="mt-12 pt-6 border-t border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-6">
+        <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
           Melody Music
         </h1>
-        <div className="flex gap-4 mt-4 md:mt-0 text-xl text-white">
-          <FaFacebookF />
-          <FaInstagram />
-          <FaTwitter />
-          <FaPhone />
+        <div className="flex gap-5 text-lg sm:text-xl text-white">
+          <FaFacebookF className="hover:text-blue-500 transition cursor-pointer" />
+          <FaInstagram className="hover:text-pink-400 transition cursor-pointer" />
+          <FaTwitter className="hover:text-sky-400 transition cursor-pointer" />
+          <FaPhone className="hover:text-green-400 transition cursor-pointer" />
         </div>
       </div>
     </div>
