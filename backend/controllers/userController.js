@@ -98,7 +98,7 @@ export const githubAuthSuccess = (req, res) => {
       maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
     });
 
-    res.redirect('http://localhost:5173/');
+    res.redirect('https://suvesh-music-melody.vercel.app/');
   } catch (err) {
     console.error('GitHub Callback Error:', err);
     res.status(500).json({ error: 'Authentication failed' });
@@ -117,7 +117,7 @@ export const googleAuthSuccess = (req, res) => {
       maxAge: 10 * 24 * 60 * 60 * 1000,
     });
 
-    res.redirect('http://localhost:5173/');
+    res.redirect('https://suvesh-music-melody.vercel.app/');
   } catch (err) {
     console.error('Google Callback Error:', err);
     res.status(500).json({ error: 'Authentication failed' });
