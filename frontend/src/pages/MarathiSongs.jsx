@@ -5,7 +5,7 @@ function MarathiSongs() {
   return (
     <>
       <NewlyReleaseSong
-        apiEndpoint="http://localhost:3000/api/songs/marathi"
+        apiEndpoint="https://musicmelody.onrender.com/api/songs/marathi"
         title="🎵 Marathi Songs"
       />
     </>

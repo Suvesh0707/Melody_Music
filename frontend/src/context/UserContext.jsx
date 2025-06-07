@@ -9,7 +9,7 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/auth/me", { withCredentials: true })
+      .get("https://musicmelody.onrender.com/auth/me", { withCredentials: true })
       .then((res) => setUser(res.data))
       .catch(() => setUser(null))
       .finally(() => setLoading(false));

@@ -5,7 +5,7 @@ function HindiSongs() {
   return (
     <>
     <NewlyReleaseSong
-  apiEndpoint="http://localhost:3000/api/songs/hindi"
+  apiEndpoint="https://musicmelody.onrender.com/api/songs/hindi"
   title="🎵 Hindi Songs"
 />
 

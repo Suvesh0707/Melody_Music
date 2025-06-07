@@ -5,7 +5,7 @@ function EnglishSongs() {
   return (
     <>
       <NewlyReleaseSong
-        apiEndpoint="http://localhost:3000/api/songs/english"
+        apiEndpoint="https://musicmelody.onrender.com/api/songs/english"
         title="🎵 English Songs"
       />
     </>

@@ -28,7 +28,7 @@ export default function Admin() {
 
     try {
       await axios.post(
-        `http://localhost:3000/api/admin/${language}`,
+        `https://musicmelody.onrender.com/api/admin/${language}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 
 function NewlyReleaseSong({
-  apiEndpoint = "http://localhost:3000/api/songs/getsongs",
+  apiEndpoint = "https://musicmelody.onrender.com/api/songs/getsongs",
   title = "🎵 New Release Songs",
 }) {
   const [songs, setSongs] = useState([]);

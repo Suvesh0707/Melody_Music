@@ -2,11 +2,11 @@ import React from 'react';
 
 const LoginPage = () => {
   const handleGitHubLogin = () => {
-    window.location.href = 'http://localhost:3000/auth/github';
+    window.location.href = 'https://musicmelody.onrender.com/auth/github';
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:3000/auth/google';
+    window.location.href = 'https://musicmelody.onrender.com/auth/google';
   };
 
   return (

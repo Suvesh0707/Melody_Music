@@ -17,7 +17,7 @@ function Navbar() {
   const handleLoginLogout = async () => {
     if (user) {
       try {
-        await axios.get("http://localhost:3000/auth/logout", {
+        await axios.get("https://musicmelody.onrender.com/auth/logout", {
           withCredentials: true,
         });
         setUser(null);

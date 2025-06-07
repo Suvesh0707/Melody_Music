@@ -28,7 +28,7 @@ function AfterSearch() {
 
       try {
         const res = await fetch(
-          `http://localhost:3000/api/songs/getallsongs?search=${encodeURIComponent(
+          `https://musicmelody.onrender.com/api/songs/getallsongs?search=${encodeURIComponent(
             searchTerm
           )}`
         );
